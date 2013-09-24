@@ -83,6 +83,15 @@ init_device_sources = [
     "ueventd.cpp",
     "ueventd_parser.cpp",
 ]
+
+cc_library_static {
+    name: "vendor_init",
+    recovery_available: true,
+    srcs: [
+        "vendor_init.cpp",
+    ],
+}
+
 init_host_sources = [
     "check_builtins.cpp",
     "host_import_parser.cpp",
@@ -208,6 +217,7 @@ cc_library_static {
     defaults: [
         "init_defaults",
         "selinux_policy_version",
+        "vendor_init_defaults",
     ],
     srcs: init_common_sources + init_device_sources,
     generated_sources: [
