@@ -153,7 +153,7 @@ cc_library_static {
     },
 
     product_variables: {
-        aosp: {
+        superior: {
             target_init_vendor_lib: {
                 whole_static_libs: ["%s"],
             },
