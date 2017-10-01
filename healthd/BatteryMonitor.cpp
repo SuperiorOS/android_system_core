@@ -312,6 +312,11 @@ bool BatteryMonitor::update(void) {
                   (access(SYSFS_BATTERY_VOLTAGE, R_OK) == 0) ? getIntField(String8(SYSFS_BATTERY_VOLTAGE)) :
                    DEFAULT_VBUS_VOLTAGE;
 
+            // there are devices that have the file but with a value of 0
+            if (ChargingVoltage == 0) {
+                ChargingVoltage = DEFAULT_VBUS_VOLTAGE;
+            }
+
             double power = ((double)ChargingCurrent / MILLION) *
                            ((double)ChargingVoltage / MILLION);
             if (MaxPower < power) {
