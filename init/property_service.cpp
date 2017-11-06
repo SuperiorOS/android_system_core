@@ -892,6 +892,52 @@ static void property_derive_build_fingerprint() {
     }
 }
 
+/* From Magisk@jni/magiskhide/hide_utils.c */
+static const char *snet_prop_key[] = {
+	"ro.boot.vbmeta.device_state",
+	"ro.boot.verifiedbootstate",
+	"ro.boot.flash.locked",
+	"ro.boot.selinux",
+	"ro.boot.veritymode",
+	"ro.boot.warranty_bit",
+	"ro.warranty_bit",
+	"ro.debuggable",
+	"ro.secure",
+	"ro.build.type",
+	"ro.build.keys",
+	"ro.build.tags",
+	"ro.system.build.tags",
+	"ro.build.selinux",
+	NULL
+};
+
+static const char *snet_prop_value[] = {
+	"locked",
+	"green",
+	"1",
+	"enforcing",
+	"enforcing",
+	"0",
+	"0",
+	"0",
+	"1",
+	"user",
+	"release-keys",
+	"release-keys",
+	"release-keys",
+	"0",
+	NULL
+};
+
+static void workaround_snet_properties() {
+	LOG(INFO) << "snet: Hiding sensitive props";
+
+	// Hide all sensitive props
+	for (int i = 0; snet_prop_key[i]; ++i) {
+		property_set(snet_prop_key[i], snet_prop_value[i]);
+	}
+}
+
 void property_load_boot_defaults(bool load_debug_prop) {
     // TODO(b/117892318): merge prop.default and build.prop files into one
     // We read the properties and their values into a map, in order to always allow properties
@@ -936,6 +982,12 @@ void property_load_boot_defaults(bool load_debug_prop) {
 
     property_initialize_ro_product_props();
     property_derive_build_fingerprint();
+
+    std::string build_type = GetProperty("ro.build.type", "");
+    if (build_type == "user") {
+        // Workaround SafetyNet
+        workaround_snet_properties();
+    }
 
     if (android::base::GetBoolProperty("ro.persistent_properties.ready", false)) {
         update_sys_usb_config();
