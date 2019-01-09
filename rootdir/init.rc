@@ -605,6 +605,12 @@ on boot
     chown root system /sys/module/lowmemorykiller/parameters/minfree
     chmod 0664 /sys/module/lowmemorykiller/parameters/minfree
 
+    # System server manages zram writeback
+    chown root system /sys/block/zram0/idle
+    chmod 0664 /sys/block/zram0/idle
+    chown root system /sys/block/zram0/writeback
+    chmod 0664 /sys/block/zram0/writeback
+
     # F2FS tuning. Set cp_interval larger than dirty_expire_centisecs, 30 secs,
     # to avoid power consumption when system becomes mostly idle. Be careful
     # to make it too large, since it may bring userdata loss, if they
