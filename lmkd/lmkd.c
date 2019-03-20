@@ -154,9 +154,9 @@ static bool per_app_memcg;
 static int swap_free_low_percentage;
 static bool use_psi_monitors = false;
 static struct psi_threshold psi_thresholds[VMPRESS_LEVEL_COUNT] = {
-    { PSI_SOME, 20 },    /* 20ms out of 1sec for partial stall */
-    { PSI_SOME, 30 },    /* 30ms out of 1sec for partial stall */
-    { PSI_FULL, 20 },    /* 20ms out of 1sec for complete stall */
+    { PSI_SOME, 60 },    /* 60ms out of 1sec for partial stall */
+    { PSI_SOME, 90 },    /* 90ms out of 1sec for partial stall */
+    { PSI_FULL, 60 },    /* 60ms out of 1sec for complete stall */
 };
 
 /* data required to handle events */
