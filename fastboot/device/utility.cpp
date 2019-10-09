@@ -194,10 +194,13 @@ std::vector<std::string> ListPartitions(FastbootDevice* device) {
 bool GetDeviceLockStatus() {
     std::string cmdline;
     // Return lock status true if unable to read kernel command line.
-    if (!android::base::ReadFileToString("/proc/cmdline", &cmdline)) {
-        return true;
-    }
-    return cmdline.find("androidboot.verifiedbootstate=green") != std::string::npos;
+     if (!android::base::ReadFileToString("/proc/cmdline", &cmdline)) {
+         return true;
+     }
+     if (android::base::GetProperty("ro.boot.vbmeta.device_state", "") != "locked") {
+         return false;
+     }
+     return cmdline.find("androidboot.verifiedbootstate=orange") == std::string::npos;
 }
 
 bool UpdateAllPartitionMetadata(FastbootDevice* device, const std::string& super_name,
