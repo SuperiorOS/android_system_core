@@ -222,7 +222,10 @@ cc_defaults {
 
 cc_library_host_static {
     name: "libfastboot",
-    defaults: ["fastboot_host_defaults"],
+    defaults: [
+        "fastboot_host_defaults",
+        "target_uses_prebuilt_dynamic_partitions_defaults",
+    ],
 
     srcs: [
         "bootimg_utils.cpp",
@@ -234,13 +237,6 @@ cc_library_host_static {
         "util.cpp",
         "fastboot_driver.cpp",
     ],
-    product_variables: {
-        superior: {
-            target_uses_prebuilt_dynamic_partitions: {
-                cflags: ["-DTARGET_USES_PREBUILT_DYNAMIC_PARTITIONS"],
-            },
-        },
-    },
 
     // Only version the final binaries
     use_version_lib: false,
