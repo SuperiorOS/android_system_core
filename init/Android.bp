@@ -162,6 +162,7 @@ cc_library_static {
     defaults: [
         "init_defaults",
         "selinux_policy_version",
+        "force_build_fingerprint_defaults",
     ],
     srcs: init_common_sources + init_device_sources,
     whole_static_libs: [
