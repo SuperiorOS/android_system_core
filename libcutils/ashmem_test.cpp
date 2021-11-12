@@ -33,7 +33,7 @@ void TestCreateRegion(size_t size, unique_fd &fd, int prot) {
     fd = unique_fd(ashmem_create_region(nullptr, size));
     ASSERT_TRUE(fd >= 0);
     ASSERT_TRUE(ashmem_valid(fd));
-    ASSERT_EQ(size, static_cast<size_t>(ashmem_get_size_region(fd)));
+    ASSERT_EQ(size, ashmem_get_size_region(fd));
     ASSERT_EQ(0, ashmem_set_prot_region(fd, prot));
 
     // We've been inconsistent historically about whether or not these file

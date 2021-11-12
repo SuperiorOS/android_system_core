@@ -17,8 +17,13 @@
 #include <cutils/ashmem.h>
 
 /*
- * Implementation of the user-space ashmem API for the simulator, which lacks
- * an ashmem-enabled kernel. See ashmem-dev.c for the real ashmem-based version.
+ * Implementation of the userspace ashmem API for the host, which lacks
+ * an ashmem-enabled kernel.
+ *
+ * See ashmem-dev.cpp for the real ashmem-based version.
+ *
+ * TODO: is this actually used on Darwin? If not, we can use the memfd_create()
+ * based implementation that's in ashmem-dev now...
  */
 
 #include <errno.h>
@@ -85,12 +90,10 @@ int ashmem_unpin_region(int /*fd*/, size_t /*offset*/, size_t /*len*/) {
     return 0 /*ASHMEM_IS_UNPINNED*/;
 }
 
-int ashmem_get_size_region(int fd)
-{
+size_t ashmem_get_size_region(int fd) {
     struct stat buf;
     if (!ashmem_validate_stat(fd, &buf)) {
         return -1;
     }
-
     return buf.st_size;
 }
