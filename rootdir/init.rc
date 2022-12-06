@@ -720,9 +720,13 @@ on post-fs-data
     # Multi-installed APEXes are selected using persist props.
     # Load persist properties and override properties (if enabled) from /data,
     # before starting apexd.
+    # /data/property should be created before `load_persist_props`
+    mkdir /data/property 0700 root root encryption=Require
     load_persist_props
+
     start logd
     start logd-reinit
+
     # Some existing vendor rc files use 'on load_persist_props_action' to know
     # when persist props are ready. These are difficult to change due to GRF,
     # so continue triggering this action here even though props are already loaded
@@ -823,6 +827,7 @@ on post-fs-data
     mkdir /data/misc/odsign 0710 root system
     # directory used for odsign metrics
     mkdir /data/misc/odsign/metrics 0770 root system
+
     # Directory for VirtualizationService temporary image files.
     # Delete any stale files owned by the old virtualizationservice uid (b/230056726).
     chmod 0770 /data/misc/virtualizationservice
@@ -841,7 +846,6 @@ on post-fs-data
     mkdir /data/app-asec 0700 root root encryption=Require
     mkdir /data/app-lib 0771 system system encryption=Require
     mkdir /data/app 0771 system system encryption=Require
-    mkdir /data/property 0700 root root encryption=Require
 
     # create directory for updated font files.
     mkdir /data/fonts/ 0771 root root encryption=Require
@@ -1029,7 +1033,8 @@ on zygote-start && property:ro.crypto.state=unencrypted
     exec_start update_verifier_nonencrypted
     start statsd
     start netd
-    trigger zygote-run
+    start zygote
+    start zygote_secondary
 
 on zygote-start && property:ro.crypto.state=unsupported
     wait_for_prop odsign.verification.done 1
@@ -1037,7 +1042,8 @@ on zygote-start && property:ro.crypto.state=unsupported
     exec_start update_verifier_nonencrypted
     start statsd
     start netd
-    trigger zygote-run
+    start zygote
+    start zygote_secondary
 
 on zygote-start && property:ro.crypto.state=encrypted && property:ro.crypto.type=file
     wait_for_prop odsign.verification.done 1
@@ -1045,15 +1051,6 @@ on zygote-start && property:ro.crypto.state=encrypted && property:ro.crypto.type
     exec_start update_verifier_nonencrypted
     start statsd
     start netd
-    trigger zygote-run
-
-on zygote-run && property:ro.zygote=zygote32
-    start zygote
-
-on zygote-run && property:ro.zygote=zygote64
-    start zygote
-
-on zygote-run && property:ro.zygote=zygote64_32
     start zygote
     start zygote_secondary
 
