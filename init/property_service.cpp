@@ -885,6 +885,7 @@ static const char *snet_prop_key[] = {
     "ro.vendor.warranty_bit",
     "vendor.boot.vbmeta.device_state",
     "vendor.boot.verifiedbootstate",
+    "sys.oem_unlock_allowed",
     NULL
 };
 
@@ -913,6 +914,7 @@ static const char *snet_prop_value[] = {
     "0", // ro.vendor.warranty_bit
     "locked", // vendor.boot.vbmeta.device_state
     "green", // vendor.boot.verifiedbootstate
+    "0", // sys.oem_unlock_allowed
     NULL
 };
 
@@ -941,6 +943,9 @@ static void workaround_snet_properties() {
     for (int i = 0; snet_prop_key[i]; ++i) {
         PropertySetNoSocket(snet_prop_key[i], snet_prop_value[i], &error);
     }
+
+    chmod("/sys/fs/selinux/enforce", 0640);
+    chmod("/sys/fs/selinux/policy", 0440);
 
     // Extra pops
     std::string build_flavor_key = "ro.build.flavor";
