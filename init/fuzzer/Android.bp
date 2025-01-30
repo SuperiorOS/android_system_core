@@ -30,7 +30,6 @@ cc_defaults {
     shared_libs: [
         "libbase",
         "libfs_mgr",
-        "libhidl-gen-utils",
         "libkeyutils",
         "liblog",
         "libprocessgroup",
@@ -50,7 +49,6 @@ cc_fuzz {
     srcs: [
         "init_parser_fuzzer.cpp",
     ],
-    shared_libs: ["libhidlmetadata",],
     defaults: [
         "libinit_fuzzer_defaults",
     ],

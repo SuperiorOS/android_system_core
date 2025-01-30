@@ -323,6 +323,12 @@ public:
     int addFd(int fd, int ident, int events, const sp<LooperCallback>& callback, void* data);
 
     /**
+     * May be useful for testing, instead of executing a looper on another thread for code expecting
+     * a looper, you can call callbacks directly.
+     */
+    bool getFdStateDebug(int fd, int* ident, int* events, sp<LooperCallback>* cb, void** data);
+
+    /**
      * Removes a previously added file descriptor from the looper.
      *
      * When this method returns, it is safe to close the file descriptor since the looper
@@ -499,8 +505,6 @@ private:
     void rebuildEpollLocked();
     void scheduleEpollRebuildLocked();
 
-    static void initTLSKey();
-    static void threadDestructor(void *st);
     static void initEpollEvent(struct epoll_event* eventItem);
 };
 

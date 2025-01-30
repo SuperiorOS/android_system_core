@@ -11,6 +11,11 @@
       "File": "foreground/cpus"
     },
     {
+      "Name": "HighCapacityWICPUs",
+      "Controller": "cpuset",
+      "File": "foreground_window/cpus"
+    },
+    {
       "Name": "MaxCapacityCPUs",
       "Controller": "cpuset",
       "File": "top-app/cpus"
@@ -154,6 +159,19 @@
           {
             "Controller": "cpu",
             "Path": "foreground"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "HighPerformanceWI",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpu",
+            "Path": "foreground_window"
           }
         }
       ]
@@ -377,6 +395,19 @@
           {
             "Controller": "cpuset",
             "Path": "foreground"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "ProcessCapacityHighWI",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpuset",
+            "Path": "foreground_window"
           }
         }
       ]
@@ -639,6 +670,10 @@
       "Profiles": [ "HighPerformance", "HighIoPriority", "TimerSlackNormal" ]
     },
     {
+      "Name": "SCHED_SP_FOREGROUND_WINDOW",
+      "Profiles": [ "HighPerformanceWI", "HighIoPriority", "TimerSlackNormal" ]
+    },
+    {
       "Name": "SCHED_SP_TOP_APP",
       "Profiles": [ "MaxPerformance", "MaxIoPriority", "TimerSlackNormal" ]
     },
@@ -667,6 +702,10 @@
       "Profiles": [ "HighPerformance", "ProcessCapacityHigh", "HighIoPriority", "TimerSlackNormal" ]
     },
     {
+      "Name": "CPUSET_SP_FOREGROUND_WINDOW",
+      "Profiles": [ "HighPerformanceWI", "ProcessCapacityHighWI", "HighIoPriority", "TimerSlackNormal" ]
+    },
+    {
       "Name": "CPUSET_SP_TOP_APP",
       "Profiles": [ "MaxPerformance", "ProcessCapacityMax", "MaxIoPriority", "TimerSlackNormal" ]
     },
@@ -689,6 +728,10 @@
     {
       "Name": "OtaProfiles",
       "Profiles": [ "ServiceCapacityLow", "LowIoPriority", "HighEnergySaving" ]
+    },
+    {
+      "Name": "InputPolicy",
+      "Profiles": [ "MaxPerformance", "ProcessCapacityMax", "TimerSlackNormal" ]
     }
   ]
 }
